@@ -1,7 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { PrismaClient } from "@prisma/client"
 import prisma from "@/libs/prismadb"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from 'bcryptjs'
@@ -9,8 +8,7 @@ import bcrypt from 'bcryptjs'
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
-
-export const authOptions:AuthOptions={
+export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -23,7 +21,7 @@ export const authOptions:AuthOptions={
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Geçersiz mail ya da şifre girdiniz.")
         }
@@ -58,7 +56,5 @@ export const authOptions:AuthOptions={
   },
   secret: process.env.NEXTAUTH_SECRET
 }
-
-
 
 export default NextAuth(authOptions)

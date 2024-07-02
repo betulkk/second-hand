@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     }
 
     await prisma.user.update({
-      where: { email: currentUser.email },
+      where: { email: currentUser.email as string },
       data: { phone },
     });
 

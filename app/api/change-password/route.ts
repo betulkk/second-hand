@@ -14,12 +14,12 @@ export async function POST(req: Request) {
 
     const currentUser = await getCurrentUser();
 
-    if (!currentUser) {
+    if (!currentUser || !currentUser.email) {
       return NextResponse.json({ message: 'User not authenticated' }, { status: 401 });
     }
 
     const user = await prisma.user.findUnique({
-      where: { email: currentUser.email },
+      where: { email: currentUser.email as string },  // Burada tipin string olduğunu garanti altına alıyoruz
     });
 
     if (!user || !user.hashed_password) {
